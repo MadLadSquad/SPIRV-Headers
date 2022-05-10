@@ -50,7 +50,7 @@ add_custom_target(install-headers
         $ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/include/spirv)
 
 option(SPIRV_HEADERS_SKIP_EXAMPLES "Skip building examples"
-      ${SPIRV_HEADERS_SKIP_EXAMPLES})
+      ON)
 
 option(SPIRV_HEADERS_SKIP_INSTALL "Skip install"
       ${SPIRV_HEADERS_SKIP_INSTALL})
@@ -61,11 +61,6 @@ endif()
 
 if(NOT ${SPIRV_HEADERS_SKIP_INSTALL})
   set(SPIRV_HEADERS_ENABLE_INSTALL ON)
-endif()
-
-if (SPIRV_HEADERS_ENABLE_EXAMPLES)
-  message(STATUS "Building SPIRV-Header examples")
-  add_subdirectory(example)
 endif()
 
 include(GNUInstallDirs)
