@@ -513,6 +513,8 @@ typedef enum SpvDecoration_ {
     SpvDecorationMaxByteOffsetId = 47,
     SpvDecorationNoSignedWrap = 4469,
     SpvDecorationNoUnsignedWrap = 4470,
+    SpvDecorationWeightTextureQCOM = 4487,
+    SpvDecorationBlockMatchTextureQCOM = 4488,
     SpvDecorationExplicitInterpAMD = 4999,
     SpvDecorationOverrideCoverageNV = 5248,
     SpvDecorationPassthroughNV = 5250,
@@ -581,6 +583,8 @@ typedef enum SpvDecoration_ {
     SpvDecorationSingleElementVectorINTEL = 6085,
     SpvDecorationVectorComputeCallableFunctionINTEL = 6087,
     SpvDecorationMediaBlockIOINTEL = 6140,
+    SpvDecorationLatencyControlLabelINTEL = 6172,
+    SpvDecorationLatencyControlConstraintINTEL = 6173,
     SpvDecorationConduitKernelArgumentINTEL = 6175,
     SpvDecorationRegisterMapKernelArgumentINTEL = 6176,
     SpvDecorationMMHostInterfaceAddressWidthINTEL = 6177,
@@ -1019,6 +1023,9 @@ typedef enum SpvCapability_ {
     SpvCapabilityRayQueryKHR = 4472,
     SpvCapabilityRayTraversalPrimitiveCullingKHR = 4478,
     SpvCapabilityRayTracingKHR = 4479,
+    SpvCapabilityTextureSampleWeightedQCOM = 4484,
+    SpvCapabilityTextureBoxFilterQCOM = 4485,
+    SpvCapabilityTextureBlockMatchQCOM = 4486,
     SpvCapabilityFloat16ImageAMD = 5008,
     SpvCapabilityImageGatherBiasLodAMD = 5009,
     SpvCapabilityFragmentMaskAMD = 5010,
@@ -1149,6 +1156,7 @@ typedef enum SpvCapability_ {
     SpvCapabilityBFloat16ConversionINTEL = 6115,
     SpvCapabilitySplitBarrierINTEL = 6141,
     SpvCapabilityFPGAKernelAttributesv2INTEL = 6161,
+    SpvCapabilityFPGALatencyControlINTEL = 6171,
     SpvCapabilityFPGAArgumentInterfacesINTEL = 6174,
     SpvCapabilityGroupUniformArithmeticKHR = 6400,
     SpvCapabilityMax = 0x7fffffff,
@@ -1634,6 +1642,10 @@ typedef enum SpvOp_ {
     SpvOpRayQueryConfirmIntersectionKHR = 4476,
     SpvOpRayQueryProceedKHR = 4477,
     SpvOpRayQueryGetIntersectionTypeKHR = 4479,
+    SpvOpImageSampleWeightedQCOM = 4480,
+    SpvOpImageBoxFilterQCOM = 4481,
+    SpvOpImageBlockMatchSSDQCOM = 4482,
+    SpvOpImageBlockMatchSADQCOM = 4483,
     SpvOpGroupIAddNonUniformAMD = 5000,
     SpvOpGroupFAddNonUniformAMD = 5001,
     SpvOpGroupFMinNonUniformAMD = 5002,
@@ -2344,6 +2356,10 @@ inline void SpvHasResultAndType(SpvOp opcode, bool *hasResult, bool *hasResultTy
     case SpvOpRayQueryConfirmIntersectionKHR: *hasResult = false; *hasResultType = false; break;
     case SpvOpRayQueryProceedKHR: *hasResult = true; *hasResultType = true; break;
     case SpvOpRayQueryGetIntersectionTypeKHR: *hasResult = true; *hasResultType = true; break;
+    case SpvOpImageSampleWeightedQCOM: *hasResult = true; *hasResultType = true; break;
+    case SpvOpImageBoxFilterQCOM: *hasResult = true; *hasResultType = true; break;
+    case SpvOpImageBlockMatchSSDQCOM: *hasResult = true; *hasResultType = true; break;
+    case SpvOpImageBlockMatchSADQCOM: *hasResult = true; *hasResultType = true; break;
     case SpvOpGroupIAddNonUniformAMD: *hasResult = true; *hasResultType = true; break;
     case SpvOpGroupFAddNonUniformAMD: *hasResult = true; *hasResultType = true; break;
     case SpvOpGroupFMinNonUniformAMD: *hasResult = true; *hasResultType = true; break;
