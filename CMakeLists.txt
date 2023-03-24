@@ -36,7 +36,7 @@ add_library(SPIRV-Headers::SPIRV-Headers ALIAS SPIRV-Headers)
 target_include_directories(SPIRV-Headers INTERFACE $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>)
 
 if (PROJECT_IS_TOP_LEVEL)
-    option(BUILD_TESTS "Build the tests")
+    option(BUILD_TESTS "Build the tests" OFF)
     if (BUILD_TESTS)
         add_subdirectory(tests)
     endif()
