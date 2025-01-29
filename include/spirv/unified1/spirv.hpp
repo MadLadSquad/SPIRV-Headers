@@ -787,6 +787,7 @@ enum BuiltIn {
     BuiltInSMIDNV = 5377,
     BuiltInHitKindFrontFacingMicroTriangleNV = 5405,
     BuiltInHitKindBackFacingMicroTriangleNV = 5406,
+    BuiltInClusterIDNV = 5436,
     BuiltInCullMaskKHR = 6021,
     BuiltInMax = 0x7fffffff,
 };
@@ -1168,6 +1169,7 @@ enum Capability {
     CapabilityShaderInvocationReorderNV = 5383,
     CapabilityBindlessTextureNV = 5390,
     CapabilityRayQueryPositionFetchKHR = 5391,
+    CapabilityCooperativeVectorNV = 5394,
     CapabilityAtomicFloat16VectorNV = 5404,
     CapabilityRayTracingDisplacementMicromapNV = 5409,
     CapabilityRawAccessChainsNV = 5414,
@@ -1176,6 +1178,8 @@ enum Capability {
     CapabilityCooperativeMatrixPerElementOperationsNV = 5432,
     CapabilityCooperativeMatrixTensorAddressingNV = 5433,
     CapabilityCooperativeMatrixBlockLoadsNV = 5434,
+    CapabilityCooperativeVectorTrainingNV = 5435,
+    CapabilityRayTracingClusterAccelerationStructureNV = 5437,
     CapabilityTensorAddressingNV = 5439,
     CapabilitySubgroupShuffleINTEL = 5568,
     CapabilitySubgroupBufferBlockIOINTEL = 5569,
@@ -1519,6 +1523,33 @@ enum RawAccessChainOperandsMask {
 
 enum FPEncoding {
     FPEncodingMax = 0x7fffffff,
+};
+
+enum CooperativeVectorMatrixLayout {
+    CooperativeVectorMatrixLayoutRowMajorNV = 0,
+    CooperativeVectorMatrixLayoutColumnMajorNV = 1,
+    CooperativeVectorMatrixLayoutInferencingOptimalNV = 2,
+    CooperativeVectorMatrixLayoutTrainingOptimalNV = 3,
+    CooperativeVectorMatrixLayoutMax = 0x7fffffff,
+};
+
+enum ComponentType {
+    ComponentTypeFloat16NV = 0,
+    ComponentTypeFloat32NV = 1,
+    ComponentTypeFloat64NV = 2,
+    ComponentTypeSignedInt8NV = 3,
+    ComponentTypeSignedInt16NV = 4,
+    ComponentTypeSignedInt32NV = 5,
+    ComponentTypeSignedInt64NV = 6,
+    ComponentTypeUnsignedInt8NV = 7,
+    ComponentTypeUnsignedInt16NV = 8,
+    ComponentTypeUnsignedInt32NV = 9,
+    ComponentTypeUnsignedInt64NV = 10,
+    ComponentTypeSignedInt8PackedNV = 1000491000,
+    ComponentTypeUnsignedInt8PackedNV = 1000491001,
+    ComponentTypeFloatE4M3NV = 1000491002,
+    ComponentTypeFloatE5M2NV = 1000491003,
+    ComponentTypeMax = 0x7fffffff,
 };
 
 enum Op {
@@ -1981,6 +2012,11 @@ enum Op {
     OpReorderThreadWithHintNV = 5280,
     OpTypeHitObjectNV = 5281,
     OpImageSampleFootprintNV = 5283,
+    OpTypeCooperativeVectorNV = 5288,
+    OpCooperativeVectorMatrixMulNV = 5289,
+    OpCooperativeVectorOuterProductAccumulateNV = 5290,
+    OpCooperativeVectorReduceSumAccumulateNV = 5291,
+    OpCooperativeVectorMatrixMulAddNV = 5292,
     OpCooperativeMatrixConvertNV = 5293,
     OpEmitMeshTasksEXT = 5294,
     OpSetMeshOutputsEXT = 5295,
@@ -1988,6 +2024,8 @@ enum Op {
     OpWritePackedPrimitiveIndices4x8NV = 5299,
     OpFetchMicroTriangleVertexPositionNV = 5300,
     OpFetchMicroTriangleVertexBarycentricNV = 5301,
+    OpCooperativeVectorLoadNV = 5302,
+    OpCooperativeVectorStoreNV = 5303,
     OpReportIntersectionKHR = 5334,
     OpReportIntersectionNV = 5334,
     OpIgnoreIntersectionNV = 5335,
@@ -1999,6 +2037,8 @@ enum Op {
     OpTypeAccelerationStructureKHR = 5341,
     OpTypeAccelerationStructureNV = 5341,
     OpExecuteCallableNV = 5344,
+    OpRayQueryGetClusterIdNV = 5345,
+    OpHitObjectGetClusterIdNV = 5346,
     OpTypeCooperativeMatrixNV = 5358,
     OpCooperativeMatrixLoadNV = 5359,
     OpCooperativeMatrixStoreNV = 5360,
@@ -2762,6 +2802,11 @@ inline void HasResultAndType(Op opcode, bool *hasResult, bool *hasResultType) {
     case OpReorderThreadWithHintNV: *hasResult = false; *hasResultType = false; break;
     case OpTypeHitObjectNV: *hasResult = true; *hasResultType = false; break;
     case OpImageSampleFootprintNV: *hasResult = true; *hasResultType = true; break;
+    case OpTypeCooperativeVectorNV: *hasResult = true; *hasResultType = false; break;
+    case OpCooperativeVectorMatrixMulNV: *hasResult = true; *hasResultType = true; break;
+    case OpCooperativeVectorOuterProductAccumulateNV: *hasResult = false; *hasResultType = false; break;
+    case OpCooperativeVectorReduceSumAccumulateNV: *hasResult = false; *hasResultType = false; break;
+    case OpCooperativeVectorMatrixMulAddNV: *hasResult = true; *hasResultType = true; break;
     case OpCooperativeMatrixConvertNV: *hasResult = true; *hasResultType = true; break;
     case OpEmitMeshTasksEXT: *hasResult = false; *hasResultType = false; break;
     case OpSetMeshOutputsEXT: *hasResult = false; *hasResultType = false; break;
@@ -2769,6 +2814,8 @@ inline void HasResultAndType(Op opcode, bool *hasResult, bool *hasResultType) {
     case OpWritePackedPrimitiveIndices4x8NV: *hasResult = false; *hasResultType = false; break;
     case OpFetchMicroTriangleVertexPositionNV: *hasResult = true; *hasResultType = true; break;
     case OpFetchMicroTriangleVertexBarycentricNV: *hasResult = true; *hasResultType = true; break;
+    case OpCooperativeVectorLoadNV: *hasResult = true; *hasResultType = true; break;
+    case OpCooperativeVectorStoreNV: *hasResult = false; *hasResultType = false; break;
     case OpReportIntersectionKHR: *hasResult = true; *hasResultType = true; break;
     case OpIgnoreIntersectionNV: *hasResult = false; *hasResultType = false; break;
     case OpTerminateRayNV: *hasResult = false; *hasResultType = false; break;
@@ -2778,6 +2825,8 @@ inline void HasResultAndType(Op opcode, bool *hasResult, bool *hasResultType) {
     case OpRayQueryGetIntersectionTriangleVertexPositionsKHR: *hasResult = true; *hasResultType = true; break;
     case OpTypeAccelerationStructureKHR: *hasResult = true; *hasResultType = false; break;
     case OpExecuteCallableNV: *hasResult = false; *hasResultType = false; break;
+    case OpRayQueryGetClusterIdNV: *hasResult = true; *hasResultType = true; break;
+    case OpHitObjectGetClusterIdNV: *hasResult = true; *hasResultType = true; break;
     case OpTypeCooperativeMatrixNV: *hasResult = true; *hasResultType = false; break;
     case OpCooperativeMatrixLoadNV: *hasResult = true; *hasResultType = true; break;
     case OpCooperativeMatrixStoreNV: *hasResult = false; *hasResultType = false; break;
@@ -3713,6 +3762,7 @@ inline const char* BuiltInToString(BuiltIn value) {
     case BuiltInSMIDNV: return "SMIDNV";
     case BuiltInHitKindFrontFacingMicroTriangleNV: return "HitKindFrontFacingMicroTriangleNV";
     case BuiltInHitKindBackFacingMicroTriangleNV: return "HitKindBackFacingMicroTriangleNV";
+    case BuiltInClusterIDNV: return "ClusterIDNV";
     case BuiltInCullMaskKHR: return "CullMaskKHR";
     default: return "Unknown";
     }
@@ -3918,6 +3968,7 @@ inline const char* CapabilityToString(Capability value) {
     case CapabilityShaderInvocationReorderNV: return "ShaderInvocationReorderNV";
     case CapabilityBindlessTextureNV: return "BindlessTextureNV";
     case CapabilityRayQueryPositionFetchKHR: return "RayQueryPositionFetchKHR";
+    case CapabilityCooperativeVectorNV: return "CooperativeVectorNV";
     case CapabilityAtomicFloat16VectorNV: return "AtomicFloat16VectorNV";
     case CapabilityRayTracingDisplacementMicromapNV: return "RayTracingDisplacementMicromapNV";
     case CapabilityRawAccessChainsNV: return "RawAccessChainsNV";
@@ -3926,6 +3977,8 @@ inline const char* CapabilityToString(Capability value) {
     case CapabilityCooperativeMatrixPerElementOperationsNV: return "CooperativeMatrixPerElementOperationsNV";
     case CapabilityCooperativeMatrixTensorAddressingNV: return "CooperativeMatrixTensorAddressingNV";
     case CapabilityCooperativeMatrixBlockLoadsNV: return "CooperativeMatrixBlockLoadsNV";
+    case CapabilityCooperativeVectorTrainingNV: return "CooperativeVectorTrainingNV";
+    case CapabilityRayTracingClusterAccelerationStructureNV: return "RayTracingClusterAccelerationStructureNV";
     case CapabilityTensorAddressingNV: return "TensorAddressingNV";
     case CapabilitySubgroupShuffleINTEL: return "SubgroupShuffleINTEL";
     case CapabilitySubgroupBufferBlockIOINTEL: return "SubgroupBufferBlockIOINTEL";
@@ -4158,6 +4211,37 @@ inline const char* NamedMaximumNumberOfRegistersToString(NamedMaximumNumberOfReg
 
 inline const char* FPEncodingToString(FPEncoding value) {
     switch (value) {
+    default: return "Unknown";
+    }
+}
+
+inline const char* CooperativeVectorMatrixLayoutToString(CooperativeVectorMatrixLayout value) {
+    switch (value) {
+    case CooperativeVectorMatrixLayoutRowMajorNV: return "RowMajorNV";
+    case CooperativeVectorMatrixLayoutColumnMajorNV: return "ColumnMajorNV";
+    case CooperativeVectorMatrixLayoutInferencingOptimalNV: return "InferencingOptimalNV";
+    case CooperativeVectorMatrixLayoutTrainingOptimalNV: return "TrainingOptimalNV";
+    default: return "Unknown";
+    }
+}
+
+inline const char* ComponentTypeToString(ComponentType value) {
+    switch (value) {
+    case ComponentTypeFloat16NV: return "Float16NV";
+    case ComponentTypeFloat32NV: return "Float32NV";
+    case ComponentTypeFloat64NV: return "Float64NV";
+    case ComponentTypeSignedInt8NV: return "SignedInt8NV";
+    case ComponentTypeSignedInt16NV: return "SignedInt16NV";
+    case ComponentTypeSignedInt32NV: return "SignedInt32NV";
+    case ComponentTypeSignedInt64NV: return "SignedInt64NV";
+    case ComponentTypeUnsignedInt8NV: return "UnsignedInt8NV";
+    case ComponentTypeUnsignedInt16NV: return "UnsignedInt16NV";
+    case ComponentTypeUnsignedInt32NV: return "UnsignedInt32NV";
+    case ComponentTypeUnsignedInt64NV: return "UnsignedInt64NV";
+    case ComponentTypeSignedInt8PackedNV: return "SignedInt8PackedNV";
+    case ComponentTypeUnsignedInt8PackedNV: return "UnsignedInt8PackedNV";
+    case ComponentTypeFloatE4M3NV: return "FloatE4M3NV";
+    case ComponentTypeFloatE5M2NV: return "FloatE5M2NV";
     default: return "Unknown";
     }
 }
@@ -4617,6 +4701,11 @@ inline const char* OpToString(Op value) {
     case OpReorderThreadWithHintNV: return "OpReorderThreadWithHintNV";
     case OpTypeHitObjectNV: return "OpTypeHitObjectNV";
     case OpImageSampleFootprintNV: return "OpImageSampleFootprintNV";
+    case OpTypeCooperativeVectorNV: return "OpTypeCooperativeVectorNV";
+    case OpCooperativeVectorMatrixMulNV: return "OpCooperativeVectorMatrixMulNV";
+    case OpCooperativeVectorOuterProductAccumulateNV: return "OpCooperativeVectorOuterProductAccumulateNV";
+    case OpCooperativeVectorReduceSumAccumulateNV: return "OpCooperativeVectorReduceSumAccumulateNV";
+    case OpCooperativeVectorMatrixMulAddNV: return "OpCooperativeVectorMatrixMulAddNV";
     case OpCooperativeMatrixConvertNV: return "OpCooperativeMatrixConvertNV";
     case OpEmitMeshTasksEXT: return "OpEmitMeshTasksEXT";
     case OpSetMeshOutputsEXT: return "OpSetMeshOutputsEXT";
@@ -4624,6 +4713,8 @@ inline const char* OpToString(Op value) {
     case OpWritePackedPrimitiveIndices4x8NV: return "OpWritePackedPrimitiveIndices4x8NV";
     case OpFetchMicroTriangleVertexPositionNV: return "OpFetchMicroTriangleVertexPositionNV";
     case OpFetchMicroTriangleVertexBarycentricNV: return "OpFetchMicroTriangleVertexBarycentricNV";
+    case OpCooperativeVectorLoadNV: return "OpCooperativeVectorLoadNV";
+    case OpCooperativeVectorStoreNV: return "OpCooperativeVectorStoreNV";
     case OpReportIntersectionKHR: return "OpReportIntersectionKHR";
     case OpIgnoreIntersectionNV: return "OpIgnoreIntersectionNV";
     case OpTerminateRayNV: return "OpTerminateRayNV";
@@ -4633,6 +4724,8 @@ inline const char* OpToString(Op value) {
     case OpRayQueryGetIntersectionTriangleVertexPositionsKHR: return "OpRayQueryGetIntersectionTriangleVertexPositionsKHR";
     case OpTypeAccelerationStructureKHR: return "OpTypeAccelerationStructureKHR";
     case OpExecuteCallableNV: return "OpExecuteCallableNV";
+    case OpRayQueryGetClusterIdNV: return "OpRayQueryGetClusterIdNV";
+    case OpHitObjectGetClusterIdNV: return "OpHitObjectGetClusterIdNV";
     case OpTypeCooperativeMatrixNV: return "OpTypeCooperativeMatrixNV";
     case OpCooperativeMatrixLoadNV: return "OpCooperativeMatrixLoadNV";
     case OpCooperativeMatrixStoreNV: return "OpCooperativeMatrixStoreNV";
