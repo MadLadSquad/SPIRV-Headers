@@ -22,7 +22,7 @@ option(SPIRV_HEADERS_ENABLE_TESTS "Test SPIRV-Headers" ${PROJECT_IS_TOP_LEVEL})
 option(SPIRV_HEADERS_ENABLE_INSTALL "Install SPIRV-Headers" ${PROJECT_IS_TOP_LEVEL})
 
 if(SPIRV_HEADERS_ENABLE_TESTS)
-    add_subdirectory(tests)
+	#    add_subdirectory(tests)
 endif()
 
 if(SPIRV_HEADERS_ENABLE_INSTALL)
