@@ -1200,6 +1200,8 @@ typedef enum SpvCapability_ {
     SpvCapabilityCooperativeMatrixConversionQCOM = 4496,
     SpvCapabilityTextureBlockMatch2QCOM = 4498,
     SpvCapabilityMultipleWaitQueuesQCOM = 4539,
+    SpvCapabilityImageGatherLinearQCOM = 4543,
+    SpvCapabilityImageGatherExtendedModesQCOM = 4544,
     SpvCapabilityFloat16ImageAMD = 5008,
     SpvCapabilityImageGatherBiasLodAMD = 5009,
     SpvCapabilityFragmentMaskAMD = 5010,
@@ -1748,6 +1750,14 @@ typedef enum SpvComponentType_ {
     SpvComponentTypeMax = 0x7fffffff,
 } SpvComponentType;
 
+typedef enum SpvGatherModes_ {
+    SpvGatherModesGather4x1QCOM = 0,
+    SpvGatherModesGatherDQCOM = 1,
+    SpvGatherModesGatherH2QCOM = 2,
+    SpvGatherModesGatherV2QCOM = 3,
+    SpvGatherModesMax = 0x7fffffff,
+} SpvGatherModes;
+
 typedef enum SpvOp_ {
     SpvOpNop = 0,
     SpvOpUndef = 1,
@@ -2171,6 +2181,7 @@ typedef enum SpvOp_ {
     SpvOpCompositeConstructCoopMatQCOM = 4540,
     SpvOpCompositeExtractCoopMatQCOM = 4541,
     SpvOpExtractSubArrayQCOM = 4542,
+    SpvOpImageGatherQCOM = 4545,
     SpvOpGroupIAddNonUniformAMD = 5000,
     SpvOpGroupFAddNonUniformAMD = 5001,
     SpvOpGroupFMinNonUniformAMD = 5002,
@@ -3105,6 +3116,7 @@ inline void SpvHasResultAndType(SpvOp opcode, bool *hasResult, bool *hasResultTy
     case SpvOpCompositeConstructCoopMatQCOM: *hasResult = true; *hasResultType = true; break;
     case SpvOpCompositeExtractCoopMatQCOM: *hasResult = true; *hasResultType = true; break;
     case SpvOpExtractSubArrayQCOM: *hasResult = true; *hasResultType = true; break;
+    case SpvOpImageGatherQCOM: *hasResult = true; *hasResultType = true; break;
     case SpvOpGroupIAddNonUniformAMD: *hasResult = true; *hasResultType = true; break;
     case SpvOpGroupFAddNonUniformAMD: *hasResult = true; *hasResultType = true; break;
     case SpvOpGroupFMinNonUniformAMD: *hasResult = true; *hasResultType = true; break;
@@ -4403,6 +4415,8 @@ inline const char* SpvCapabilityToString(SpvCapability value) {
     case SpvCapabilityCooperativeMatrixConversionQCOM: return "CooperativeMatrixConversionQCOM";
     case SpvCapabilityTextureBlockMatch2QCOM: return "TextureBlockMatch2QCOM";
     case SpvCapabilityMultipleWaitQueuesQCOM: return "MultipleWaitQueuesQCOM";
+    case SpvCapabilityImageGatherLinearQCOM: return "ImageGatherLinearQCOM";
+    case SpvCapabilityImageGatherExtendedModesQCOM: return "ImageGatherExtendedModesQCOM";
     case SpvCapabilityFloat16ImageAMD: return "Float16ImageAMD";
     case SpvCapabilityImageGatherBiasLodAMD: return "ImageGatherBiasLodAMD";
     case SpvCapabilityFragmentMaskAMD: return "FragmentMaskAMD";
@@ -4771,6 +4785,16 @@ inline const char* SpvComponentTypeToString(SpvComponentType value) {
     case SpvComponentTypeUnsignedInt8PackedNV: return "UnsignedInt8PackedNV";
     case SpvComponentTypeFloatE4M3NV: return "FloatE4M3NV";
     case SpvComponentTypeFloatE5M2NV: return "FloatE5M2NV";
+    default: return "Unknown";
+    }
+}
+
+inline const char* SpvGatherModesToString(SpvGatherModes value) {
+    switch (value) {
+    case SpvGatherModesGather4x1QCOM: return "Gather4x1QCOM";
+    case SpvGatherModesGatherDQCOM: return "GatherDQCOM";
+    case SpvGatherModesGatherH2QCOM: return "GatherH2QCOM";
+    case SpvGatherModesGatherV2QCOM: return "GatherV2QCOM";
     default: return "Unknown";
     }
 }
@@ -5193,6 +5217,7 @@ inline const char* SpvOpToString(SpvOp value) {
     case SpvOpCompositeConstructCoopMatQCOM: return "OpCompositeConstructCoopMatQCOM";
     case SpvOpCompositeExtractCoopMatQCOM: return "OpCompositeExtractCoopMatQCOM";
     case SpvOpExtractSubArrayQCOM: return "OpExtractSubArrayQCOM";
+    case SpvOpImageGatherQCOM: return "OpImageGatherQCOM";
     case SpvOpGroupIAddNonUniformAMD: return "OpGroupIAddNonUniformAMD";
     case SpvOpGroupFAddNonUniformAMD: return "OpGroupFAddNonUniformAMD";
     case SpvOpGroupFMinNonUniformAMD: return "OpGroupFMinNonUniformAMD";
