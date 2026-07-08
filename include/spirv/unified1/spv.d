@@ -717,6 +717,7 @@ enum Decoration : uint
     ConditionalINTEL = 6247,
     CacheControlLoadINTEL = 6442,
     CacheControlStoreINTEL = 6443,
+    IntrinsicSAMSUNG = 7040,
     Max = 0x7fffffff,
 }
 
@@ -1459,6 +1460,7 @@ enum Capability : uint
     DotProductFloat16AccFloat16VALVE = 6913,
     DotProductBFloat16AccVALVE = 6914,
     DotProductFloat8AccFloat32VALVE = 6915,
+    IntrinsicSAMSUNG = 7041,
     Max = 0x7fffffff,
 }
 

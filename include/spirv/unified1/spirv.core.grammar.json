@@ -15987,6 +15987,15 @@
             { "kind" : "StoreCacheControl", "name" : "Cache Control" }
           ],
           "version" : "None"
+        },
+        {
+          "enumerant" : "IntrinsicSAMSUNG",
+          "value" : 7040,
+          "capabilities": [ "IntrinsicSAMSUNG" ],
+          "parameters": [
+            { "kind" : "LiteralInteger", "name" : "Intrinsic ID" }
+          ],
+          "version" : "None"
         }
       ]
     },
@@ -18897,6 +18906,12 @@
           "value" : 6915,
           "capabilities" : [ "Float8EXT" ],
           "extensions" : [ "SPV_VALVE_mixed_float_dot_product" ],
+          "version" : "None"
+        },
+        {
+          "enumerant" : "IntrinsicSAMSUNG",
+          "value" : 7041,
+          "extensions" : [ "SPV_SAMSUNG_intrinsic" ],
           "version" : "None"
         }
       ]
